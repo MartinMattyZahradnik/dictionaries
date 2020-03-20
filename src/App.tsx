@@ -12,6 +12,7 @@ import configureStore from "redux/store";
 // Components
 import { CircularProgress } from "@material-ui/core";
 import GlobalStyles, { theme } from "./GlobalStyles";
+import Header from "components/header/Header";
 import Routes from "./Routes";
 
 const { store, persistor } = configureStore();
@@ -32,6 +33,7 @@ function App() {
           <PersistGate loading={<CircularProgress />} persistor={persistor}>
             <Router history={history}>
               <GlobalStyles />
+              <Header />
               <StyledApp>
                 <Routes />
               </StyledApp>

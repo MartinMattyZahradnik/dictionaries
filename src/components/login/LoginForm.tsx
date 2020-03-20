@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 // Components
-import { Redirect } from "react-router-dom";
 import { Form, FormikProps, withFormik, Field } from "formik";
 import { Grid, Card, Button } from "@material-ui/core";
 import FormField from "components/common/form/FormField";
@@ -18,7 +17,6 @@ import { ILoginActionPayload } from "redux/user/types";
 
 // Selectors
 import { selectUserError } from "redux/user/userSelectors";
-import { selectIsUserLoggedIn } from "redux/user/userSelectors";
 
 // Others
 import validationSchema from "./LoginFormValidationSchema";
@@ -82,10 +80,8 @@ interface ILoginFormProps extends ILoginFormValues {
 
 const LoginPage = (props: ILoginFormProps & FormikProps<ILoginFormValues>) => {
   const { touched, isSubmitting, values, loginErrorCode } = props;
-  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
-  return isUserLoggedIn ? (
-    <Redirect to="/" />
-  ) : (
+
+  return (
     <StyledFormWrapper container>
       <StyledLoginFormWrapper>
         <Form>

@@ -1,27 +1,32 @@
 import React, { Suspense, lazy } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { selectIsUserLoggedIn } from "redux/user/userSelectors";
 
 // Components
+import { CircularProgress } from "@material-ui/core";
 const Login = lazy(() => import("components/login/LoginForm"));
+const DictionaryList = lazy(() =>
+  import("components/dictionaryList/DictionaryList")
+);
+const DictionaryDetail = lazy(() =>
+  import("components/dictionaryDetail/DictionaryDetail")
+);
 
 // Selectors
 
 const Routes = () => {
   const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
 
-  return isUserLoggedIn ? (
-    <Suspense fallback={<div>Loading...</div>}>
+  return (
+    <Suspense fallback={<CircularProgress />}>
       <Switch>
-        <Route exact path="/login" component={Login} />
-
-        <Redirect to="/" />
+        {!isUserLoggedIn && <Route component={Login} />}
+        <Route exact path="/" component={DictionaryList} />
+        <Route exact path="/dictionary/:id" component={DictionaryDetail} />
       </Switch>
     </Suspense>
-  ) : (
-    <Redirect to="/" />
   );
 };
 
