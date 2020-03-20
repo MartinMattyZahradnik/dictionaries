@@ -1,5 +1,4 @@
-import { request } from "utils/request";
-import { takeLatest, put } from "redux-saga/effects";
+import { takeLatest, put, delay } from "redux-saga/effects";
 import { LOGIN } from "redux/user/types";
 
 // Actions
@@ -8,6 +7,8 @@ import { loginSuccess, loginError } from "./userActions";
 // Types
 import { ILoginActionPayload } from "./types";
 
+import { history } from "App";
+
 function* loginSagaWatcher({
   payload
 }: {
@@ -15,14 +16,12 @@ function* loginSagaWatcher({
   payload: ILoginActionPayload;
 }) {
   try {
-    const resp = yield request.post(`/auth/login`, payload);
-    sessionStorage.setItem("jwtToken", resp.data.token);
-    request.defaults.headers.Authorization = resp.data.token;
-    yield put(loginSuccess(resp.data.user));
+    // to simulate async request
+    yield delay(500);
+    yield put(loginSuccess({ username: payload.username }));
+    history.push("/");
   } catch (error) {
-    if (error.response.status === 404 || error.response.status === 403) {
-      yield put(loginError(error.response.status));
-    }
+    yield put(loginError(403));
   }
 }
 

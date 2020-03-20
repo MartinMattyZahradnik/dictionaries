@@ -1,3 +1,5 @@
+import { Error } from "redux/types";
+
 // LOGIN
 export const LOGIN = "user/LOGIN";
 export const LOGIN_SUCCESS = "user/LOGIN_SUCCESS";
@@ -7,14 +9,11 @@ export const LOGOUT = "user/LOGOUT";
 export type AvailableUserRoles = "admin" | "user" | "visitor";
 
 export interface IUser {
-  _id: string;
   username: string;
-  password: string;
 }
 
 export interface ILoginActionPayload {
   username: string;
-  password: string;
 }
 
 export interface LoginAction {
@@ -50,7 +49,7 @@ export type UserIsLoadingReducerTypes =
   | LogoutAction;
 
 export interface IUserReducerState {
-  error: null | number;
+  error: null | Error;
   result: IUser | null;
   isLoading: boolean;
 }

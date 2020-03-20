@@ -17,7 +17,9 @@
     "@types/redux-persist": "4.3.1",
     "@types/styled-components": "5.0.1",
     "@types/uuid": "7.0.1",
+    "@types/yup": "0.26.33",
     "axios": "0.19.2",
+    "formik": "2.1.4",
     "react": "16.13.0",
     "react-dom": "16.13.0",
     "react-redux": "7.2.0",
@@ -31,7 +33,8 @@
     "styled-components": "5.0.1",
     "styled-reset": "4.1.1",
     "typescript": "3.7.2",
-    "uuid": "7.0.2"
+    "uuid": "7.0.2",
+    "yup": "0.28.3"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -12,9 +12,9 @@ import {
 } from "redux/user/types";
 
 /*** ===  LOGIN === ***/
-export const login = (username: string, password: string): LoginAction => ({
+export const login = (username: string): LoginAction => ({
   type: LOGIN,
-  payload: { username, password }
+  payload: { username }
 });
 
 export const loginSuccess = (user: IUser): LoginSuccessAction => ({
