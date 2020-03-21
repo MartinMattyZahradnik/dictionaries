@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
-import { IState } from "redux/rootReducer";
+import { RootState } from "redux/rootReducer";
 import { Error } from "redux/types";
 
-const getUserData = (state: IState) => state.user;
+const getUserData = (state: RootState) => state.user;
 
 export const selectUser = createSelector(
   getUserData,
@@ -23,3 +23,7 @@ export const selectIsUserLoggedIn = createSelector(
   selectUser,
   (user): boolean => Boolean(user)
 );
+
+export const selectUsername = createSelector(selectUser, (user):
+  | string
+  | null => (user ? user.username : null));

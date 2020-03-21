@@ -6,24 +6,22 @@ export const LOGIN_SUCCESS = "user/LOGIN_SUCCESS";
 export const LOGIN_ERROR = "user/LOGIN_ERROR";
 export const LOGOUT = "user/LOGOUT";
 
-export type AvailableUserRoles = "admin" | "user" | "visitor";
-
-export interface IUser {
+export interface User {
   username: string;
 }
 
-export interface ILoginActionPayload {
+export interface LoginActionPayload {
   username: string;
 }
 
 export interface LoginAction {
   type: typeof LOGIN;
-  payload: ILoginActionPayload;
+  payload: LoginActionPayload;
 }
 
 export interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: { user: IUser };
+  payload: { user: User };
 }
 
 export interface LoginErrorAction {
@@ -48,8 +46,8 @@ export type UserIsLoadingReducerTypes =
   | LoginErrorAction
   | LogoutAction;
 
-export interface IUserReducerState {
+export interface UserReducerState {
   error: null | Error;
-  result: IUser | null;
+  result: User | null;
   isLoading: boolean;
 }

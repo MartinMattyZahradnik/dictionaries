@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import {
-  IUser,
+  User,
   UserErrorReducerTypes,
   UserResultReducerTypes,
   UserIsLoadingReducerTypes
@@ -29,7 +29,7 @@ function error(state: null | Error = null, action: UserErrorReducerTypes) {
   }
 }
 
-function result(state: null | IUser = null, action: UserResultReducerTypes) {
+function result(state: null | User = null, action: UserResultReducerTypes) {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return action.payload.user;

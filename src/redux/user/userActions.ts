@@ -8,7 +8,7 @@ import {
   LoginErrorAction,
   LOGOUT,
   LogoutAction,
-  IUser
+  User
 } from "redux/user/types";
 
 /*** ===  LOGIN === ***/
@@ -17,7 +17,7 @@ export const login = (username: string): LoginAction => ({
   payload: { username }
 });
 
-export const loginSuccess = (user: IUser): LoginSuccessAction => ({
+export const loginSuccess = (user: User): LoginSuccessAction => ({
   type: LOGIN_SUCCESS,
   payload: { user }
 });

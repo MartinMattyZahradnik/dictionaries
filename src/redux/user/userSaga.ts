@@ -5,7 +5,7 @@ import { LOGIN } from "redux/user/types";
 import { loginSuccess, loginError } from "./userActions";
 
 // Types
-import { ILoginActionPayload } from "./types";
+import { LoginActionPayload } from "./types";
 
 import { history } from "App";
 
@@ -13,7 +13,7 @@ function* loginSagaWatcher({
   payload
 }: {
   type: string;
-  payload: ILoginActionPayload;
+  payload: LoginActionPayload;
 }) {
   try {
     // to simulate async request

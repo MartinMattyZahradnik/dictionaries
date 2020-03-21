@@ -2,21 +2,27 @@ import { combineReducers } from "redux";
 
 // Reducers
 import userReducer from "redux/user/userReducer";
+import dictionariesReducer from "redux/dictionaries/dictionariesReducer";
 
 // Reducers Types
-import { IUserReducerState } from "redux/user/types";
+import { UserReducerState } from "redux/user/types";
+import { DictionariesReducerState } from "redux/dictionaries/types";
 
 // Default states
 import { defaultState as userDefaultState } from "./user/userReducer";
+import { defaultState as dictionariesDefaultState } from "./dictionaries/dictionariesReducer";
 
-export interface IState {
-  user: IUserReducerState;
+export interface RootState {
+  user: UserReducerState;
+  dictionaries: DictionariesReducerState;
 }
 
-export const initialState: IState = {
-  user: userDefaultState
+export const initialState: RootState = {
+  user: userDefaultState,
+  dictionaries: dictionariesDefaultState
 };
 
 export default combineReducers({
-  user: userReducer
+  user: userReducer,
+  dictionaries: dictionariesReducer
 });

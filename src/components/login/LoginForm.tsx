@@ -13,14 +13,14 @@ import { login } from "redux/user/userActions";
 
 // Types
 import { Error } from "redux/types";
-import { ILoginActionPayload } from "redux/user/types";
+import { LoginActionPayload } from "redux/user/types";
 
 // Selectors
 import { selectUserError } from "redux/user/userSelectors";
 
 // Others
 import validationSchema from "./LoginFormValidationSchema";
-import { IState } from "redux/rootReducer";
+import { RootState } from "redux/rootReducer";
 
 const StyledFormWrapper = styled(Grid)`
   margin: auto;
@@ -74,7 +74,7 @@ interface ILoginFormValues {
 }
 
 interface ILoginFormProps extends ILoginFormValues {
-  login: (username: string) => { type: string; payload: ILoginActionPayload };
+  login: (username: string) => { type: string; payload: LoginActionPayload };
   loginErrorCode: Error | null;
 }
 
@@ -130,7 +130,7 @@ const WithFormikLoginPage = withFormik<ILoginFormProps, ILoginFormValues>({
 })(LoginPage);
 
 export default connect(
-  (state: IState) => ({
+  (state: RootState) => ({
     loginErrorCode: selectUserError(state)
   }),
   { login }
