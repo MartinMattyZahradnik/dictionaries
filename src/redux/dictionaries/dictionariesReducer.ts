@@ -9,40 +9,13 @@ import {
   DictionariesErrorReducerTypes,
   DictionariesResultReducerTypes,
   DictionariesIsLoadingReducerTypes,
-  DELETE_DICTIONARY
+  DELETE_DICTIONARY,
+  CREATE_DICTIONARY_SUCCESS
 } from "redux/dictionaries/types";
-
-const username = "matty";
-const dictionaries = [
-  {
-    owner: username,
-    name: "pokustek1",
-    language: "en",
-    words: []
-  },
-  {
-    owner: username,
-    name: "pokustek2",
-    language: "en",
-    words: []
-  },
-  {
-    owner: username,
-    name: "pokustek3",
-    language: "en",
-    words: []
-  },
-  {
-    owner: username,
-    name: "pokustek4",
-    language: "cz",
-    words: []
-  }
-];
 
 export const defaultState = {
   error: null,
-  result: dictionaries,
+  result: [],
   isLoading: false
 };
 
@@ -70,6 +43,9 @@ function result(
   switch (action.type) {
     case FETCH_DICTIONARIES_SUCCESS:
       return action.payload.dictionaries;
+
+    case CREATE_DICTIONARY_SUCCESS:
+      return [action.payload.dictionary, ...state];
 
     case DELETE_DICTIONARY:
       return state.filter(

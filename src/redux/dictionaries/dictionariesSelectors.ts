@@ -27,3 +27,9 @@ export const selectUserDictionaries = createSelector(
   (dictionaries, username): Dictionary[] =>
     dictionaries.filter(dictionary => dictionary.owner === username)
 );
+
+export const selectDictionaryDetail = createSelector(
+  [selectDictionaries, (state: RootState, id: string) => id],
+  (dictionaries, id): Dictionary | undefined =>
+    dictionaries.find(dictionary => dictionary.name === id)
+);
