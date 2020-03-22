@@ -118,9 +118,7 @@ const DictionaryList = () => {
         <DictionaryForm
           id=""
           name=""
-          owner=""
           language=""
-          words={{}}
           submitCallback={() => setIsDictionaryFormModalOpen(false)}
         />
       </Modal>
