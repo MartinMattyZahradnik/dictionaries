@@ -22,6 +22,10 @@ export default createGlobalStyle`
     line-height: 2.2rem;
   }
 
+  p {
+    font-size: 1.6rem;
+  }
+
   h1, h2, h3 {
     text-align: center;
   }
@@ -41,6 +45,10 @@ export default createGlobalStyle`
     text-decoration: none;
   }
   
+  .MuiTypography-body1 {
+    font-size: 1.6rem;
+  }
+
   .MuiTextField-root {
     width: 100%;
   }

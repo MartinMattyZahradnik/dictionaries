@@ -17,9 +17,8 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Add";
-import CloseIcon from "@material-ui/icons/Close";
 import DictionaryForm from "components/dictionaryForm/DictionaryForm";
-import Modal from "react-modal";
+import Modal from "components/common/modal/Modal";
 
 // Actions
 import { deleteDictionary } from "redux/dictionaries/dictionariesActions";
@@ -30,8 +29,6 @@ import { selectUsername } from "redux/user/userSelectors";
 
 // Types
 import { RootState } from "redux/rootReducer";
-
-Modal.setAppElement("#root");
 
 const StyledDeleteIcon = styled(DeleteIcon)`
   color: ${({ theme }) => theme.color.primary};
@@ -46,16 +43,6 @@ const StyledCreateIcon = styled(CreateIcon)<{ onClick: any }>`
   height: 3rem;
 `;
 
-const StyledCloseButton = styled(CloseIcon)`
-  position: absolute;
-  z-index: 1;
-  top: 2.5rem;
-  right: 2.5rem;
-  width: 3rem;
-  height: 3rem;
-  cursor: pointer;
-`;
-
 const StyledTableCell = styled(TableCell)`
   padding: 2rem 2.4rem 0.6rem 1.6rem;
 `;
@@ -63,19 +50,6 @@ const StyledTableCell = styled(TableCell)`
 const StyledCreateSection = styled(Grid)`
   margin-bottom: 5rem;
 `;
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    width: "100%",
-    height: "100%"
-  }
-};
 
 const DictionaryList = () => {
   const dispatch = useDispatch();
@@ -136,15 +110,11 @@ const DictionaryList = () => {
         </TableContainer>
       )}
 
-      {/* TODO: Wrap react-modal to custom component to hide <StyledCloseButton /> implementation */}
       <Modal
         isOpen={isDictionaryFormModalOpen}
-        style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="Dictionary form"
+        closeButtonCallback={() => setIsDictionaryFormModalOpen(false)}
       >
-        <StyledCloseButton
-          onClick={() => setIsDictionaryFormModalOpen(false)}
-        />
         <DictionaryForm
           id=""
           name=""

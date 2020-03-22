@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { pathOr } from "ramda";
 
 // Components
 import { Form, FormikProps, withFormik, Field } from "formik";
@@ -78,7 +79,7 @@ interface DictionaryFormProps extends DictionaryFormValues {
 const DictionaryForm = (
   props: DictionaryFormProps & FormikProps<DictionaryFormValues>
 ) => {
-  const { touched, isSubmitting, values } = props;
+  const { touched, isSubmitting, values, errors } = props;
 
   return (
     <StyledFormWrapper container>
@@ -94,7 +95,10 @@ const DictionaryForm = (
               component={FormField}
             />
 
-            <FormError touched={touched.name}>
+            <FormError
+              hasError={pathOr(false, ["name"], errors)}
+              touched={touched.name}
+            >
               Dictionary name is required
             </FormError>
           </StyledFieldWrapper>

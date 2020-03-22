@@ -1,3 +1,4 @@
+import { SagaIterator } from "redux-saga";
 import { takeLatest, put, delay } from "redux-saga/effects";
 import { LOGIN } from "redux/user/types";
 
@@ -14,7 +15,7 @@ function* loginSagaWatcher({
 }: {
   type: string;
   payload: LoginActionPayload;
-}) {
+}): SagaIterator<void> {
   try {
     // to simulate async request
     yield delay(500);

@@ -1,24 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Formik } from "formik";
+import { pathOr } from "ramda";
 
 // Components
-import { Form, FormikProps, withFormik, Field } from "formik";
-import { Grid, Card, Button } from "@material-ui/core";
+import { Field } from "formik";
+import { Grid, Card, Button, Typography } from "@material-ui/core";
 import FormField from "components/common/form/FormField";
 import FormError from "components/common/form/FormError";
 
 // Actions
 import { createWord } from "redux/dictionaries/dictionariesActions";
 
-// Types
-import {
-  CreateWordActionPayload,
-  CreateWordActionType
-} from "redux/dictionaries/types";
-
 // Others
 import validationSchema from "./WordFormValidationSchema";
+import { translationService } from "utils/translationService";
 
 const StyledFormWrapper = styled(Grid)`
   margin: auto;
@@ -61,67 +58,92 @@ const StyledButton = styled(Button)`
   margin-left: auto;
 `;
 
-interface WordFormValues {
-  text: string;
-  translation: string;
-}
-
 interface WordFormProps {
-  createWord: (word: CreateWordActionPayload) => CreateWordActionType;
   dictionaryId: string;
-  submitCallback: any;
+  submitCallback: Function;
+  text: string;
+  languageCode: string;
 }
 
-const WordForm = (props: WordFormProps & FormikProps<WordFormValues>) => {
-  const { touched, isSubmitting, values } = props;
+const WordForm = ({
+  languageCode,
+  submitCallback,
+  text,
+  dictionaryId
+}: WordFormProps) => {
+  const dispatch = useDispatch();
+  const [translation, setTranslation] = useState("");
+
+  const handleTranslateWord = async ({ value }: any) => {
+    if (value) {
+      const res = await translationService(value, languageCode);
+      if (res) {
+        const translation = res.data.data.translations[0].translatedText;
+        setTranslation(translation);
+      }
+    }
+  };
+
+  const handleSubmit = (values: any, { setSubmitting }: any) => {
+    dispatch(
+      createWord({
+        text: values.text,
+        translation,
+        dictionaryId
+      })
+    );
+
+    submitCallback();
+    setSubmitting(false);
+  };
 
   return (
     <StyledFormWrapper container>
       <StyledWordFormWrapper>
-        <Form>
-          <StyledFieldWrapper>
-            <Field
-              name="text"
-              type="text"
-              label="Word"
-              value={values.text}
-              placeholder="Type word"
-              component={FormField}
-            />
+        <Formik
+          initialValues={{ text }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          {({ values, handleSubmit, touched, isSubmitting, errors }) => (
+            <Grid container component="form" onSubmit={handleSubmit}>
+              <StyledFieldWrapper>
+                <Field
+                  name="text"
+                  type="text"
+                  label="Word"
+                  value={values.text}
+                  placeholder="Type word"
+                  component={FormField}
+                  onChange={handleTranslateWord}
+                />
 
-            <FormError touched={touched.text}>Word field is required</FormError>
-          </StyledFieldWrapper>
+                <FormError
+                  hasError={pathOr(false, ["text"], errors)}
+                  touched={touched.text}
+                >
+                  Word field is required
+                </FormError>
+              </StyledFieldWrapper>
 
-          <Grid container justify="space-between">
-            <StyledButton
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-            >
-              Save word
-            </StyledButton>
-          </Grid>
-        </Form>
+              <Typography>Translation: {translation}</Typography>
+
+              <Grid container justify="space-between">
+                <StyledButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
+                  Save word
+                </StyledButton>
+              </Grid>
+            </Grid>
+          )}
+        </Formik>
       </StyledWordFormWrapper>
     </StyledFormWrapper>
   );
 };
 
-const WithFormikWordForm = withFormik<WordFormProps, WordFormValues>({
-  displayName: "Word form",
-  validationSchema,
-  handleSubmit(values, { props, setSubmitting }) {
-    console.log(values, "values");
-    console.log(props, "props");
-    props.createWord({
-      text: values.text,
-      translation: values.translation,
-      dictionaryId: props.dictionaryId
-    });
-    props.submitCallback();
-    setSubmitting(false);
-  }
-})(WordForm);
-
-export default connect(null, { createWord })(WithFormikWordForm);
+export default WordForm;

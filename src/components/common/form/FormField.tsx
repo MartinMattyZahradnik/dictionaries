@@ -25,6 +25,8 @@ interface IProps extends FieldProps {
   label: string;
   type: string;
   multiline?: boolean;
+  onChange?: Function;
+  field: any;
 }
 
 const Field: React.FC<IProps> = ({
@@ -32,14 +34,20 @@ const Field: React.FC<IProps> = ({
   label,
   type,
   field,
-  multiline = false
+  multiline = false,
+  onChange
 }) => {
+  if (onChange) {
+    onChange(field);
+  }
+
   return (
     <StyledTextField
       multiline={multiline}
       placeholder={placeholder}
       type={type}
       label={label}
+      onChange={() => alert("!!!")}
       {...field}
     />
   );

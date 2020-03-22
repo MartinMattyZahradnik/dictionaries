@@ -1,3 +1,4 @@
+import { SagaIterator } from "redux-saga";
 import { takeLatest, put, delay, select } from "redux-saga/effects";
 import uuid from "uuid/v4";
 import {
@@ -30,7 +31,7 @@ import { history } from "App";
 
 function* fetchDictionariesSagaWatcher({
   payload
-}: FetchDictionariesActionType) {
+}: FetchDictionariesActionType): SagaIterator<void> {
   try {
     // to simulate async request
     yield delay(1200);
@@ -49,7 +50,7 @@ function* fetchDictionariesSagaWatcher({
 
 function* createDictionarySagaWatcher({
   payload: { name, language }
-}: CreateDictionaryActionType) {
+}: CreateDictionaryActionType): SagaIterator<void> {
   try {
     const owner = yield select(selectUsername);
 
@@ -76,7 +77,7 @@ function* createDictionarySagaWatcher({
 
 function* createWordWatcher({
   payload: { dictionaryId, text, translation }
-}: CreateWordActionType) {
+}: CreateWordActionType): SagaIterator<void> {
   try {
     const { language, id } = yield select(selectDictionaryDetail, dictionaryId);
 
@@ -87,7 +88,7 @@ function* createWordWatcher({
         {
           id: uuid(),
           text,
-          translation: "translation1",
+          translation,
           language
         },
         id

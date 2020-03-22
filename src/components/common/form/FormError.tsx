@@ -10,12 +10,15 @@ const StyledErrorMsg = styled(Typography)`
 `;
 
 interface FormErrorProps {
+  hasError: boolean;
   touched: boolean | undefined;
   children: React.ReactNode;
 }
 
-const FormError = ({ touched, children }: FormErrorProps) => {
-  return touched ? <StyledErrorMsg>{children}</StyledErrorMsg> : null;
+const FormError = ({ touched, children, hasError = false }: FormErrorProps) => {
+  return touched && hasError ? (
+    <StyledErrorMsg>{children}</StyledErrorMsg>
+  ) : null;
 };
 
 export default FormError;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { pathOr } from "ramda";
 
 // Components
 import { Form, FormikProps, withFormik, Field } from "formik";
@@ -79,7 +80,7 @@ interface ILoginFormProps extends ILoginFormValues {
 }
 
 const LoginPage = (props: ILoginFormProps & FormikProps<ILoginFormValues>) => {
-  const { touched, isSubmitting, values, loginErrorCode } = props;
+  const { touched, isSubmitting, values, loginErrorCode, errors } = props;
 
   return (
     <StyledFormWrapper container>
@@ -95,7 +96,10 @@ const LoginPage = (props: ILoginFormProps & FormikProps<ILoginFormValues>) => {
               component={FormField}
             />
 
-            <FormError touched={touched.username}>
+            <FormError
+              hasError={pathOr(false, ["username"], errors)}
+              touched={touched.username}
+            >
               User name is required
             </FormError>
           </StyledFieldWrapper>

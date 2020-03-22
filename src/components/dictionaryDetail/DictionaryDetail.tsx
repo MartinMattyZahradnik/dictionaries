@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import styled from "styled-components";
 
 // Components
-import Modal from "react-modal";
 import {
   Table,
   Grid,
@@ -16,11 +15,12 @@ import {
   Typography,
   TableHead
 } from "@material-ui/core";
+import Modal from "components/common/modal/Modal";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Add";
-import CloseIcon from "@material-ui/icons/Close";
 import VolumeIcon from "@material-ui/icons/VolumeUp";
 import WordForm from "components/wordForm/WordForm";
+import BackIcon from "@material-ui/icons/ArrowBack";
 
 // Actions
 import { deleteWord } from "redux/dictionaries/dictionariesActions";
@@ -28,19 +28,6 @@ import { deleteWord } from "redux/dictionaries/dictionariesActions";
 // Selectors
 import { selectDictionaryDetail } from "redux/dictionaries/dictionariesSelectors";
 import { RootState } from "redux/rootReducer";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    width: "100%",
-    height: "100%"
-  }
-};
 
 const StyledTableCell = styled(TableCell)`
   padding: 2rem 2.4rem 0.6rem 1.6rem;
@@ -59,6 +46,12 @@ const StyledCreateIcon = styled(CreateIcon)<{ onClick: any }>`
   height: 3rem;
 `;
 
+const StyledBackButton = styled(BackIcon)`
+  margin-right: 1rem;
+  width: 3rem;
+  height: 3rem;
+`;
+
 const StyledVolumeIcon = styled(VolumeIcon)`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
@@ -66,21 +59,11 @@ const StyledVolumeIcon = styled(VolumeIcon)`
   height: 3rem;
 `;
 
-const StyledCloseButton = styled(CloseIcon)`
-  position: absolute;
-  z-index: 1;
-  top: 2.5rem;
-  right: 2.5rem;
-  width: 3rem;
-  height: 3rem;
-  cursor: pointer;
-`;
-
 const StyledCreateSection = styled(Grid)`
   margin-bottom: 5rem;
 `;
 
-const StuledDictionaryInfoSection = styled(Grid)`
+const StyledDictionaryInfoSection = styled(Grid)`
   margin-bottom: 5rem;
 `;
 
@@ -110,14 +93,25 @@ const DictionaryDetail = ({
 
   return (
     <Grid container>
-      <StyledCreateSection container justify="flex-end" alignItems="center">
-        <Typography>Create new dictionary</Typography>
-        <StyledCreateIcon onClick={() => setIsWordFormModalOpen(true)} />
+      <StyledCreateSection container justify="space-between">
+        <Link to="/">
+          <Grid container alignItems="center">
+            <StyledBackButton />
+            Back to dictionaries
+          </Grid>
+        </Link>
+
+        <Typography component="div">
+          <Grid container alignItems="center">
+            Create a new word
+            <StyledCreateIcon onClick={() => setIsWordFormModalOpen(true)} />
+          </Grid>
+        </Typography>
       </StyledCreateSection>
-      <StuledDictionaryInfoSection item xs={12}>
+      <StyledDictionaryInfoSection item xs={12}>
         <Typography>Dictionary name: {name}</Typography>
         <Typography>Language: {language}</Typography>
-      </StuledDictionaryInfoSection>
+      </StyledDictionaryInfoSection>
 
       {Object.values(words).length === 0 && (
         <Grid container justify="center">
@@ -168,14 +162,14 @@ const DictionaryDetail = ({
         </TableContainer>
       )}
 
-      {/* TODO: Wrap react-modal to custom component to hide <StyledCloseButton /> implementation */}
       <Modal
         isOpen={isWordFormModalOpen}
-        style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="Word form"
+        closeButtonCallback={() => setIsWordFormModalOpen(false)}
       >
-        <StyledCloseButton onClick={() => setIsWordFormModalOpen(false)} />
         <WordForm
+          languageCode="en"
+          text=""
           dictionaryId={id}
           submitCallback={() => setIsWordFormModalOpen(false)}
         />
