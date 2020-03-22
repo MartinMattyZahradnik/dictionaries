@@ -12,16 +12,25 @@ export const CREATE_DICTIONARY_ERROR = "dictionaries/CREATE_DICTIONARY_ERROR";
 
 export const DELETE_DICTIONARY = "dictionaries/DELETE_DICTIONARY";
 
+export const CREATE_WORD = "dictionaries/CREATE_WORD";
+export const CREATE_WORD_SUCCESS = "dictionaries/CREATE_WORD_SUCCESS";
+export const CREATE_WORD_ERROR = "dictionaries/CREATE_WORD_ERROR";
+
+export const DELETE_WORD = "dictionary/DELETE_WORD";
+
 export interface Dictionary {
+  id: string;
   name: string;
   owner: string;
   language: string;
-  words: Word[];
+  words: { [key: string]: Word };
 }
 
 export interface Word {
+  id: string;
   text: string;
   translation: string;
+  language: string;
 }
 
 export interface FetchDictionariesActionType {
@@ -59,6 +68,31 @@ export interface DeleteDictionaryActionType {
   payload: { name: string };
 }
 
+export type CreateWordActionPayload = {
+  text: string;
+  translation: string;
+  dictionaryId: string;
+};
+export interface CreateWordActionType {
+  type: typeof CREATE_WORD;
+  payload: CreateWordActionPayload;
+}
+
+export interface CreateWordSuccessActionType {
+  type: typeof CREATE_WORD_SUCCESS;
+  payload: { word: Word; dictionaryId: string };
+}
+
+export interface CreateWordErrorActionType {
+  type: typeof CREATE_WORD_ERROR;
+  payload: { error: Error };
+}
+
+export interface DeleteWordActionType {
+  type: typeof DELETE_WORD;
+  payload: { id: string; dictionaryId: string };
+}
+
 export type DictionariesErrorReducerTypes =
   | FetchDictionariesActionType
   | FetchDictionariesSuccessActionType
@@ -67,7 +101,9 @@ export type DictionariesErrorReducerTypes =
 export type DictionariesResultReducerTypes =
   | FetchDictionariesSuccessActionType
   | DeleteDictionaryActionType
-  | CreateDictionarySuccessActionType;
+  | CreateDictionarySuccessActionType
+  | CreateWordSuccessActionType
+  | DeleteWordActionType;
 
 export type DictionariesIsLoadingReducerTypes =
   | FetchDictionariesActionType

@@ -1,9 +1,12 @@
 import { takeLatest, put, delay, select } from "redux-saga/effects";
+import uuid from "uuid/v4";
 import {
   FETCH_DICTIONARIES,
   FetchDictionariesActionType,
   CREATE_DICTIONARY,
-  CreateDictionaryActionType
+  CreateDictionaryActionType,
+  CREATE_WORD,
+  CreateWordActionType
 } from "redux/dictionaries/types";
 
 // Actions
@@ -11,11 +14,16 @@ import {
   fetchDictionariesSuccess,
   fetchDictionariesError,
   createDictionarySuccess,
-  createDictionaryError
+  createDictionaryError,
+  createWordSuccess,
+  createWordError
 } from "./dictionariesActions";
 
 // Selectors
-import { selectDictionaries } from "./dictionariesSelectors";
+import {
+  selectDictionaries,
+  selectDictionaryDetail
+} from "./dictionariesSelectors";
 import { selectUsername } from "redux/user/userSelectors";
 
 import { history } from "App";
@@ -49,10 +57,11 @@ function* createDictionarySagaWatcher({
     yield delay(1200);
     yield put(
       createDictionarySuccess({
+        id: uuid(),
         name,
         language,
         owner,
-        words: []
+        words: {}
       })
     );
   } catch (error) {
@@ -65,7 +74,37 @@ function* createDictionarySagaWatcher({
   }
 }
 
+function* createWordWatcher({
+  payload: { dictionaryId, text, translation }
+}: CreateWordActionType) {
+  try {
+    const { language, id } = yield select(selectDictionaryDetail, dictionaryId);
+
+    // to simulate async request
+    yield delay(1200);
+    yield put(
+      createWordSuccess(
+        {
+          id: uuid(),
+          text,
+          translation: "translation1",
+          language
+        },
+        id
+      )
+    );
+  } catch (error) {
+    yield put(
+      createWordError({
+        message: "Ups. Unable to create word.",
+        statusCode: 400
+      })
+    );
+  }
+}
+
 export default function* userSaga() {
   yield takeLatest(FETCH_DICTIONARIES, fetchDictionariesSagaWatcher);
   yield takeLatest(CREATE_DICTIONARY, createDictionarySagaWatcher);
+  yield takeLatest(CREATE_WORD, createWordWatcher);
 }

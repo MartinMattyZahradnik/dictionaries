@@ -7,19 +7,18 @@ import { Form, FormikProps, withFormik, Field } from "formik";
 import { Grid, Card, Button } from "@material-ui/core";
 import FormField from "components/common/form/FormField";
 import FormError from "components/common/form/FormError";
-import FormSelect from "components/common/form/FormSelect";
 
 // Actions
-import { createDictionary } from "redux/dictionaries/dictionariesActions";
+import { createWord } from "redux/dictionaries/dictionariesActions";
 
 // Types
 import {
-  Dictionary,
-  CreateDictionaryActionType
+  CreateWordActionPayload,
+  CreateWordActionType
 } from "redux/dictionaries/types";
 
 // Others
-import validationSchema from "./DictionaryFormValidationSchema";
+import validationSchema from "./WordFormValidationSchema";
 
 const StyledFormWrapper = styled(Grid)`
   margin: auto;
@@ -29,7 +28,7 @@ const StyledFormWrapper = styled(Grid)`
   height: calc(100vh - 14rem);
 `;
 
-const StyledDictionaryFormWrapper = styled(Card)`
+const StyledWordFormWrapper = styled(Card)`
   padding: 3.5rem 5rem;
   width: 40rem;
   position: absolute;
@@ -62,54 +61,35 @@ const StyledButton = styled(Button)`
   margin-left: auto;
 `;
 
-interface DictionaryFormValues extends Dictionary {}
+interface WordFormValues {
+  text: string;
+  translation: string;
+}
 
-interface DictionaryFormProps extends DictionaryFormValues {
-  id: string;
-  createDictionary: (
-    name: string,
-    language: string
-  ) => CreateDictionaryActionType;
-  name: string;
-  language: string;
+interface WordFormProps {
+  createWord: (word: CreateWordActionPayload) => CreateWordActionType;
+  dictionaryId: string;
   submitCallback: any;
 }
 
-const DictionaryForm = (
-  props: DictionaryFormProps & FormikProps<DictionaryFormValues>
-) => {
+const WordForm = (props: WordFormProps & FormikProps<WordFormValues>) => {
   const { touched, isSubmitting, values } = props;
 
   return (
     <StyledFormWrapper container>
-      <StyledDictionaryFormWrapper>
+      <StyledWordFormWrapper>
         <Form>
           <StyledFieldWrapper>
             <Field
-              name="name"
+              name="text"
               type="text"
-              label="Dictionary name"
-              value={values.name}
-              placeholder="Type dictionary name"
+              label="Word"
+              value={values.text}
+              placeholder="Type word"
               component={FormField}
             />
 
-            <FormError touched={touched.name}>
-              Dictionary name is required
-            </FormError>
-          </StyledFieldWrapper>
-
-          <StyledFieldWrapper>
-            <Field
-              name="language"
-              label="Dictionary language"
-              placeholder="Select dictionary language"
-              component={FormSelect}
-              options={[
-                { value: "en", label: "English" },
-                { value: "sk", label: "Slovak" }
-              ]}
-            />
+            <FormError touched={touched.text}>Word field is required</FormError>
           </StyledFieldWrapper>
 
           <Grid container justify="space-between">
@@ -119,35 +99,29 @@ const DictionaryForm = (
               color="primary"
               disabled={isSubmitting}
             >
-              Create Dictionary
+              Save word
             </StyledButton>
           </Grid>
         </Form>
-      </StyledDictionaryFormWrapper>
+      </StyledWordFormWrapper>
     </StyledFormWrapper>
   );
 };
 
-const WithFormikDictionaryForm = withFormik<
-  DictionaryFormProps,
-  DictionaryFormValues
->({
-  displayName: "Dictionary form",
+const WithFormikWordForm = withFormik<WordFormProps, WordFormValues>({
+  displayName: "Word form",
   validationSchema,
   handleSubmit(values, { props, setSubmitting }) {
-    props.createDictionary(values.name, values.language);
+    console.log(values, "values");
+    console.log(props, "props");
+    props.createWord({
+      text: values.text,
+      translation: values.translation,
+      dictionaryId: props.dictionaryId
+    });
     props.submitCallback();
     setSubmitting(false);
-  },
-  mapPropsToValues(props) {
-    return {
-      id: "",
-      name: props.name || "",
-      owner: "matty",
-      language: "en",
-      words: {}
-    };
   }
-})(DictionaryForm);
+})(WordForm);
 
-export default connect(null, { createDictionary })(WithFormikDictionaryForm);
+export default connect(null, { createWord })(WithFormikWordForm);

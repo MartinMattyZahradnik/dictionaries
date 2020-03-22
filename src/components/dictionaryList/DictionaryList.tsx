@@ -114,8 +114,8 @@ const DictionaryList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dictionaries.map(({ name, language }) => (
-                <TableRow key={name}>
+              {dictionaries.map(({ id, name, language }) => (
+                <TableRow key={id}>
                   <StyledTableCell scope="row">
                     <Link to={`/dictionary/${name}`}>
                       <Typography>{name}</Typography>
@@ -146,10 +146,11 @@ const DictionaryList = () => {
           onClick={() => setIsDictionaryFormModalOpen(false)}
         />
         <DictionaryForm
+          id=""
           name=""
           owner=""
           language=""
-          words={[]}
+          words={{}}
           submitCallback={() => setIsDictionaryFormModalOpen(false)}
         />
       </Modal>

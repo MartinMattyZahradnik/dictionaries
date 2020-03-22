@@ -1,3 +1,4 @@
+import { dissoc } from "ramda";
 import { combineReducers } from "redux";
 import { Error } from "redux/types";
 
@@ -10,7 +11,9 @@ import {
   DictionariesResultReducerTypes,
   DictionariesIsLoadingReducerTypes,
   DELETE_DICTIONARY,
-  CREATE_DICTIONARY_SUCCESS
+  CREATE_DICTIONARY_SUCCESS,
+  CREATE_WORD_SUCCESS,
+  DELETE_WORD
 } from "redux/dictionaries/types";
 
 export const defaultState = {
@@ -51,6 +54,31 @@ function result(
       return state.filter(
         dictionary => dictionary.name !== action.payload.name
       );
+
+    case CREATE_WORD_SUCCESS:
+      return state.map(dictionary => {
+        if (dictionary.id === action.payload.dictionaryId) {
+          return {
+            ...dictionary,
+            words: {
+              ...dictionary.words,
+              [action.payload.word.id]: action.payload.word
+            }
+          };
+        }
+        return dictionary;
+      });
+
+    case DELETE_WORD:
+      return state.map(dictionary => {
+        if (dictionary.id === action.payload.dictionaryId) {
+          return {
+            ...dictionary,
+            words: dissoc(action.payload.id, dictionary.words)
+          };
+        }
+        return dictionary;
+      });
 
     default:
       return state;
