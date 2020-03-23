@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { Formik } from "formik";
 import { pathOr } from "ramda";
 
 // Components
-import { Field } from "formik";
+import { Formik, Field } from "formik";
 import { Grid, Card, Button, Typography } from "@material-ui/core";
 import FormField from "components/common/form/FormField";
 import FormError from "components/common/form/FormError";
@@ -84,7 +83,7 @@ const WordForm = ({
     }
   };
 
-  const handleSubmit = (values: any, { setSubmitting }: any) => {
+  const handleSubmit = (values: { text: string }, { setSubmitting }: any) => {
     dispatch(
       createWord({
         text: values.text,
@@ -106,7 +105,12 @@ const WordForm = ({
           validationSchema={validationSchema}
         >
           {({ values, handleSubmit, touched, isSubmitting, errors }) => (
-            <Grid container component="form" onSubmit={handleSubmit}>
+            <Grid
+              container
+              component="form"
+              direction="column"
+              onSubmit={handleSubmit}
+            >
               <StyledFieldWrapper>
                 <Field
                   name="text"

@@ -35,7 +35,7 @@ const StyledDeleteIcon = styled(DeleteIcon)`
   cursor: pointer;
 `;
 
-const StyledCreateIcon = styled(CreateIcon)<{ onClick: any }>`
+const StyledCreateIcon = styled(CreateIcon)<{ onClick: () => void }>`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
   margin-left: 1rem;

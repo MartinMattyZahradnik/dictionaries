@@ -17,6 +17,7 @@ export const CREATE_WORD_SUCCESS = "dictionaries/CREATE_WORD_SUCCESS";
 export const CREATE_WORD_ERROR = "dictionaries/CREATE_WORD_ERROR";
 
 export const DELETE_WORD = "dictionary/DELETE_WORD";
+export const PLAY_TRANSLATION = "dictionary/PLAY_TRANSLATION";
 
 export interface Dictionary {
   id: string;
@@ -91,6 +92,11 @@ export interface CreateWordErrorActionType {
 export interface DeleteWordActionType {
   type: typeof DELETE_WORD;
   payload: { id: string; dictionaryId: string };
+}
+
+export interface PlayTranslationActionType {
+  type: typeof PLAY_TRANSLATION;
+  payload: { translation: string };
 }
 
 export type DictionariesErrorReducerTypes =

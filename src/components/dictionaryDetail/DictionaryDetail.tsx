@@ -23,7 +23,10 @@ import WordForm from "components/wordForm/WordForm";
 import BackIcon from "@material-ui/icons/ArrowBack";
 
 // Actions
-import { deleteWord } from "redux/dictionaries/dictionariesActions";
+import {
+  deleteWord,
+  playTranslation
+} from "redux/dictionaries/dictionariesActions";
 
 // Selectors
 import { selectDictionaryDetail } from "redux/dictionaries/dictionariesSelectors";
@@ -38,7 +41,7 @@ const StyledDeleteIcon = styled(DeleteIcon)`
   cursor: pointer;
 `;
 
-const StyledCreateIcon = styled(CreateIcon)<{ onClick: any }>`
+const StyledCreateIcon = styled(CreateIcon)<{ onClick: () => void }>`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
   margin-left: 1rem;
@@ -52,7 +55,7 @@ const StyledBackButton = styled(BackIcon)`
   height: 3rem;
 `;
 
-const StyledVolumeIcon = styled(VolumeIcon)`
+const StyledVolumeIcon = styled(VolumeIcon)<{ onClick: () => void }>`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
   width: 3rem;
@@ -145,7 +148,9 @@ const DictionaryDetail = ({
                   </StyledTableCell>
 
                   <StyledTableCell>
-                    <StyledVolumeIcon />
+                    <StyledVolumeIcon
+                      onClick={() => dispatch(playTranslation(translation))}
+                    />
                   </StyledTableCell>
 
                   <StyledTableCell align="right">

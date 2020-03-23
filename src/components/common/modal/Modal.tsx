@@ -5,7 +5,9 @@ import styled from "styled-components";
 // Components
 import CloseIcon from "@material-ui/icons/Close";
 
-const StyledCloseButton = styled(CloseIcon)<{ onClick: any }>`
+const StyledCloseButton = styled(CloseIcon)<{
+  onClick: any;
+}>`
   position: absolute;
   z-index: 1;
   top: 2.5rem;

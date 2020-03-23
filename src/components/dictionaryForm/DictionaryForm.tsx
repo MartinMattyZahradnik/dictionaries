@@ -92,7 +92,12 @@ const DictionaryForm = ({
           validationSchema={validationSchema}
         >
           {({ values, handleSubmit, touched, isSubmitting, errors }) => (
-            <Grid container component="form" onSubmit={handleSubmit}>
+            <Grid
+              container
+              component="form"
+              direction="column"
+              onSubmit={handleSubmit}
+            >
               <StyledFieldWrapper>
                 <Field
                   name="name"

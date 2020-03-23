@@ -24,7 +24,7 @@ const StyledAppBarContent = styled(Grid)`
   margin: auto;
 `;
 
-const StyledButton = styled(Button)<{ onClick?: any }>`
+const StyledButton = styled(Button)<{ onClick?: () => void }>`
   width: 7rem;
   margin-left: auto;
 `;

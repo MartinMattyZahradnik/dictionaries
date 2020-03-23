@@ -1,13 +1,16 @@
 import { SagaIterator } from "redux-saga";
 import { takeLatest, put, delay, select } from "redux-saga/effects";
 import uuid from "uuid/v4";
+import { request } from "utils/request";
 import {
   FETCH_DICTIONARIES,
   FetchDictionariesActionType,
   CREATE_DICTIONARY,
   CreateDictionaryActionType,
   CREATE_WORD,
-  CreateWordActionType
+  CreateWordActionType,
+  PLAY_TRANSLATION,
+  PlayTranslationActionType
 } from "redux/dictionaries/types";
 
 // Actions
@@ -104,8 +107,44 @@ function* createWordWatcher({
   }
 }
 
+function* playTranslationSagaWatcher({
+  payload: { translation }
+}: PlayTranslationActionType) {
+  try {
+    const API_KEY = process.env.REACT_APP_GOOGLE_TRANSLATE_API_KEY;
+    const res = yield request.post(
+      "https://texttospeech.googleapis.com/v1beta1/text:synthesize",
+      {
+        input: {
+          text: translation
+        },
+        voice: {
+          languageCode: "en-gb",
+          ssmlGender: "FEMALE"
+        },
+        audioConfig: {
+          audioEncoding: "MP3"
+        }
+      },
+      { headers: { "X-Goog-Api-Key": API_KEY } }
+    );
+
+    const {
+      data: { audioContent }
+    } = res;
+
+    const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
+    audio.play();
+  } catch (error) {
+    // Dispatch notification to user
+    // log error to logger service (APM or something similar)
+    console.log("Ups. Unable to play translation");
+  }
+}
+
 export default function* userSaga() {
   yield takeLatest(FETCH_DICTIONARIES, fetchDictionariesSagaWatcher);
   yield takeLatest(CREATE_DICTIONARY, createDictionarySagaWatcher);
   yield takeLatest(CREATE_WORD, createWordWatcher);
+  yield takeLatest(PLAY_TRANSLATION, playTranslationSagaWatcher);
 }

@@ -24,7 +24,9 @@ import {
   CREATE_WORD_ERROR,
   CreateWordErrorActionType,
   DELETE_WORD,
-  DeleteWordActionType
+  DeleteWordActionType,
+  PLAY_TRANSLATION,
+  PlayTranslationActionType
 } from "redux/dictionaries/types";
 
 /*** ===  FETCH_DICTIONARIES === ***/
@@ -105,4 +107,12 @@ export const deleteWord = (
 ): DeleteWordActionType => ({
   type: DELETE_WORD,
   payload: { id, dictionaryId }
+});
+
+/** PLAY_TRANSLATION **/
+export const playTranslation = (
+  translation: string
+): PlayTranslationActionType => ({
+  type: PLAY_TRANSLATION,
+  payload: { translation }
 });
