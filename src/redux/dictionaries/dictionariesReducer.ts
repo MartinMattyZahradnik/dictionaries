@@ -10,6 +10,7 @@ import {
   DictionariesErrorReducerTypes,
   DictionariesResultReducerTypes,
   DictionariesIsLoadingReducerTypes,
+  UPDATE_DICTIONARY,
   DELETE_DICTIONARY,
   CREATE_DICTIONARY_SUCCESS,
   CREATE_WORD_SUCCESS,
@@ -50,10 +51,20 @@ function result(
     case CREATE_DICTIONARY_SUCCESS:
       return [action.payload.dictionary, ...state];
 
+    case UPDATE_DICTIONARY:
+      return state.map(dictionary => {
+        if (dictionary.id === action.payload.id) {
+          return {
+            ...dictionary,
+            name: action.payload.name,
+            language: action.payload.language
+          };
+        }
+        return dictionary;
+      });
+
     case DELETE_DICTIONARY:
-      return state.filter(
-        dictionary => dictionary.name !== action.payload.name
-      );
+      return state.filter(dictionary => dictionary.id !== action.payload.id);
 
     case CREATE_WORD_SUCCESS:
       return state.map(dictionary => {

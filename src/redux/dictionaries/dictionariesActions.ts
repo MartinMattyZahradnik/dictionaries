@@ -26,7 +26,10 @@ import {
   DELETE_WORD,
   DeleteWordActionType,
   PLAY_TRANSLATION,
-  PlayTranslationActionType
+  PlayTranslationActionType,
+  UPDATE_DICTIONARY,
+  UpdateDictionaryActionType,
+  Language
 } from "redux/dictionaries/types";
 
 /*** ===  FETCH_DICTIONARIES === ***/
@@ -51,15 +54,24 @@ export const fetchDictionariesError = (
   payload: { error }
 });
 
-export const deleteDictionary = (name: string): DeleteDictionaryActionType => ({
+export const updateDictionary = (
+  id: string,
+  name: string,
+  language: Language
+): UpdateDictionaryActionType => ({
+  type: UPDATE_DICTIONARY,
+  payload: { id, name, language }
+});
+
+export const deleteDictionary = (id: string): DeleteDictionaryActionType => ({
   type: DELETE_DICTIONARY,
-  payload: { name }
+  payload: { id }
 });
 
 /*** ===  CREATE_DICTIONARY === ***/
 export const createDictionary = (
   name: string,
-  language: string
+  language: Language
 ): CreateDictionaryActionType => ({
   type: CREATE_DICTIONARY,
   payload: { name, language }

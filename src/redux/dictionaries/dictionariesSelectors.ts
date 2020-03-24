@@ -3,7 +3,7 @@ import { RootState } from "redux/rootReducer";
 import { Error } from "redux/types";
 
 // Types
-import { Dictionary } from "./types";
+import { Dictionary, Language } from "./types";
 
 const getDictionaries = (state: RootState) => state.dictionaries;
 
@@ -33,3 +33,18 @@ export const selectDictionaryDetail = createSelector(
   (dictionaries, id): Dictionary | undefined =>
     dictionaries.find(dictionary => dictionary.name === id)
 );
+
+export const selectAvailableLanguages = (): Language[] => [
+  { label: "Slovak", languageCode: "sk" },
+  { label: "Czech", languageCode: "cz" },
+  { label: "English", languageCode: "en" },
+  { label: "Spain", languageCode: "es" },
+  { label: "Chinese", languageCode: "cn" }
+];
+
+export const selectLanguageByLanguageCode = (
+  languageCode: string
+): Language | undefined =>
+  selectAvailableLanguages().find(
+    language => language.languageCode === languageCode
+  );

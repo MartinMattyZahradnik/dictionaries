@@ -92,7 +92,11 @@ const DictionaryDetail = ({
     return null;
   }
 
-  const { name, language, words } = dictionaryDetail;
+  const {
+    name,
+    language: { languageCode, label },
+    words
+  } = dictionaryDetail;
 
   return (
     <Grid container>
@@ -113,7 +117,7 @@ const DictionaryDetail = ({
       </StyledCreateSection>
       <StyledDictionaryInfoSection item xs={12}>
         <Typography>Dictionary name: {name}</Typography>
-        <Typography>Language: {language}</Typography>
+        <Typography>Language: {label}</Typography>
       </StyledDictionaryInfoSection>
 
       {Object.values(words).length === 0 && (
@@ -173,7 +177,7 @@ const DictionaryDetail = ({
         closeButtonCallback={() => setIsWordFormModalOpen(false)}
       >
         <WordForm
-          languageCode="en"
+          languageCode={languageCode}
           text=""
           dictionaryId={id}
           submitCallback={() => setIsWordFormModalOpen(false)}

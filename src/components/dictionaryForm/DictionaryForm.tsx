@@ -12,10 +12,20 @@ import FormError from "components/common/form/FormError";
 import FormSelect from "components/common/form/FormSelect";
 
 // Actions
-import { createDictionary } from "redux/dictionaries/dictionariesActions";
+import {
+  createDictionary,
+  updateDictionary
+} from "redux/dictionaries/dictionariesActions";
+
+// Types
+import { Language } from "redux/dictionaries/types";
 
 // Others
 import validationSchema from "./DictionaryFormValidationSchema";
+import {
+  selectAvailableLanguages,
+  selectLanguageByLanguageCode
+} from "redux/dictionaries/dictionariesSelectors";
 
 const StyledFormWrapper = styled(Grid)`
   margin: auto;
@@ -61,21 +71,31 @@ const StyledButton = styled(Button)`
 interface DictionaryFormProps {
   id: string;
   name: string;
-  language: string;
+  language: Language;
   submitCallback: any;
 }
 
 const DictionaryForm = ({
   language,
   name,
-  submitCallback
+  submitCallback,
+  id
 }: DictionaryFormProps) => {
   const dispatch = useDispatch();
+  const availableLanguages = selectAvailableLanguages();
   const handleSubmit = (
     values: { name: string; language: string },
     { props, setSubmitting }: any
   ) => {
-    dispatch(createDictionary(values.name, values.language));
+    const language = selectLanguageByLanguageCode(values.language);
+    if (language && !id) {
+      dispatch(createDictionary(values.name, language));
+    }
+
+    if (language && id) {
+      dispatch(updateDictionary(id, values.name, language));
+    }
+
     submitCallback();
     setSubmitting(false);
   };
@@ -86,7 +106,7 @@ const DictionaryForm = ({
         <Formik
           initialValues={{
             name,
-            language
+            language: language.languageCode
           }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
@@ -122,10 +142,13 @@ const DictionaryForm = ({
                   label="Dictionary language"
                   placeholder="Select dictionary language"
                   component={FormSelect}
-                  options={[
-                    { value: "en", label: "English" },
-                    { value: "sk", label: "Slovak" }
-                  ]}
+                  disabled={id}
+                  options={availableLanguages.map(
+                    ({ label, languageCode }) => ({
+                      label,
+                      value: languageCode
+                    })
+                  )}
                 />
               </StyledFieldWrapper>
 
@@ -136,7 +159,7 @@ const DictionaryForm = ({
                   color="primary"
                   disabled={isSubmitting}
                 >
-                  Create Dictionary
+                  {id ? "Update Dictionary" : "Create Dictionary"}
                 </StyledButton>
               </Grid>
             </Grid>

@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Add";
+import UpdateIcon from "@material-ui/icons/Edit";
 import DictionaryForm from "components/dictionaryForm/DictionaryForm";
 import Modal from "components/common/modal/Modal";
 
@@ -29,10 +30,13 @@ import { selectUsername } from "redux/user/userSelectors";
 
 // Types
 import { RootState } from "redux/rootReducer";
+import { Dictionary } from "redux/dictionaries/types";
 
 const StyledDeleteIcon = styled(DeleteIcon)`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const StyledCreateIcon = styled(CreateIcon)<{ onClick: () => void }>`
@@ -41,6 +45,14 @@ const StyledCreateIcon = styled(CreateIcon)<{ onClick: () => void }>`
   margin-left: 1rem;
   width: 3rem;
   height: 3rem;
+`;
+
+const StyledUpdateIcon = styled(UpdateIcon)<{ onClick: () => void }>`
+  color: ${({ theme }) => theme.color.primary};
+  cursor: pointer;
+  margin-right: 1rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const StyledTableCell = styled(TableCell)`
@@ -54,6 +66,9 @@ const StyledCreateSection = styled(Grid)`
 const DictionaryList = () => {
   const dispatch = useDispatch();
   const username = useSelector(selectUsername) || "";
+  const [activeDictionary, setActiveDictionary] = useState<null | Dictionary>(
+    null
+  );
   const dictionaries = useSelector((state: RootState) =>
     selectUserDictionaries(state, username)
   );
@@ -61,6 +76,11 @@ const DictionaryList = () => {
   const [isDictionaryFormModalOpen, setIsDictionaryFormModalOpen] = useState(
     false
   );
+
+  const handleEditIconClick = (dictionary: Dictionary): void => {
+    setActiveDictionary(dictionary);
+    setIsDictionaryFormModalOpen(true);
+  };
 
   return (
     <>
@@ -88,7 +108,7 @@ const DictionaryList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dictionaries.map(({ id, name, language }) => (
+              {dictionaries.map(({ id, name, language, ...rest }) => (
                 <TableRow key={id}>
                   <StyledTableCell scope="row">
                     <Link to={`/dictionary/${name}`}>
@@ -96,11 +116,16 @@ const DictionaryList = () => {
                     </Link>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <Typography>{language}</Typography>
+                    <Typography>{language.label}</Typography>
                   </StyledTableCell>
                   <StyledTableCell align="right">
+                    <StyledUpdateIcon
+                      onClick={() =>
+                        handleEditIconClick({ id, name, language, ...rest })
+                      }
+                    />
                     <StyledDeleteIcon
-                      onClick={() => dispatch(deleteDictionary(name))}
+                      onClick={() => dispatch(deleteDictionary(id))}
                     />
                   </StyledTableCell>
                 </TableRow>
@@ -116,9 +141,14 @@ const DictionaryList = () => {
         closeButtonCallback={() => setIsDictionaryFormModalOpen(false)}
       >
         <DictionaryForm
-          id=""
-          name=""
-          language=""
+          id={(activeDictionary && activeDictionary.id) || ""}
+          name={(activeDictionary && activeDictionary.name) || ""}
+          language={
+            (activeDictionary && activeDictionary.language) || {
+              label: "English",
+              languageCode: "en"
+            }
+          }
           submitCallback={() => setIsDictionaryFormModalOpen(false)}
         />
       </Modal>
