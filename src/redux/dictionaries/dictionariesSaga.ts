@@ -108,7 +108,7 @@ function* createWordWatcher({
 }
 
 function* playTranslationSagaWatcher({
-  payload: { translation }
+  payload: { translation, languageCode }
 }: PlayTranslationActionType) {
   try {
     const API_KEY = process.env.REACT_APP_GOOGLE_TRANSLATE_API_KEY;
@@ -119,7 +119,7 @@ function* playTranslationSagaWatcher({
           text: translation
         },
         voice: {
-          languageCode: "en-gb",
+          languageCode,
           ssmlGender: "FEMALE"
         },
         audioConfig: {

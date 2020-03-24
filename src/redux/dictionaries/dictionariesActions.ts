@@ -123,8 +123,9 @@ export const deleteWord = (
 
 /** PLAY_TRANSLATION **/
 export const playTranslation = (
-  translation: string
+  translation: string,
+  languageCode: string
 ): PlayTranslationActionType => ({
   type: PLAY_TRANSLATION,
-  payload: { translation }
+  payload: { translation, languageCode }
 });

@@ -36,10 +36,10 @@ export const selectDictionaryDetail = createSelector(
 
 export const selectAvailableLanguages = (): Language[] => [
   { label: "Slovak", languageCode: "sk" },
-  { label: "Czech", languageCode: "cz" },
-  { label: "English", languageCode: "en" },
+  { label: "Czech", languageCode: "cs" },
+  { label: "English", languageCode: "en-gb" },
   { label: "Spain", languageCode: "es" },
-  { label: "Chinese", languageCode: "cn" }
+  { label: "Chinese", languageCode: "zh-cn" }
 ];
 
 export const selectLanguageByLanguageCode = (

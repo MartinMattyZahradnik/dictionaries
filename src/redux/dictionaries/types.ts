@@ -107,7 +107,7 @@ export interface DeleteWordActionType {
 
 export interface PlayTranslationActionType {
   type: typeof PLAY_TRANSLATION;
-  payload: { translation: string };
+  payload: { translation: string; languageCode: string };
 }
 
 export type DictionariesErrorReducerTypes =

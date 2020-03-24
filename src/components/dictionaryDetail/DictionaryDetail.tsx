@@ -153,7 +153,9 @@ const DictionaryDetail = ({
 
                   <StyledTableCell>
                     <StyledVolumeIcon
-                      onClick={() => dispatch(playTranslation(translation))}
+                      onClick={() =>
+                        dispatch(playTranslation(translation, languageCode))
+                      }
                     />
                   </StyledTableCell>
 
