@@ -99,7 +99,7 @@ const DictionaryDetail = ({
   } = dictionaryDetail;
 
   return (
-    <Grid container>
+    <Grid container data-testid="dictionary-detail">
       <StyledCreateSection container justify="space-between">
         <Link to="/">
           <Grid container alignItems="center">
@@ -116,12 +116,16 @@ const DictionaryDetail = ({
         </Typography>
       </StyledCreateSection>
       <StyledDictionaryInfoSection item xs={12}>
-        <Typography>Dictionary name: {name}</Typography>
-        <Typography>Language: {label}</Typography>
+        <Typography data-testid="dictionary-name">
+          Dictionary name: {name}
+        </Typography>
+        <Typography data-testid="dictionary-language">
+          Language: {label}
+        </Typography>
       </StyledDictionaryInfoSection>
 
       {Object.values(words).length === 0 && (
-        <Grid container justify="center">
+        <Grid container justify="center" data-testid="no-words-message">
           <Typography variant="h4">
             There are no words belongs to this dictionary. Let's create a new
             one :)
@@ -141,8 +145,8 @@ const DictionaryDetail = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.values(words).map(({ text, id, translation }) => (
-                <TableRow key={id}>
+              {Object.values(words).map(({ text, id, translation }, index) => (
+                <TableRow key={id} data-testid={`word-row-${index}`}>
                   <StyledTableCell scope="row">
                     <Typography>{text}</Typography>
                   </StyledTableCell>

@@ -83,14 +83,18 @@ const DictionaryList = () => {
   };
 
   return (
-    <>
+    <Grid data-testid="dictionary-list">
       <StyledCreateSection container justify="flex-end" alignItems="center">
         <Typography>Create new dictionary</Typography>
         <StyledCreateIcon onClick={() => setIsDictionaryFormModalOpen(true)} />
       </StyledCreateSection>
 
       {dictionaries.length === 0 && (
-        <Grid container justify="center">
+        <Grid
+          container
+          justify="center"
+          data-testid="dictionary-no-dictionaries"
+        >
           <Typography variant="h4">
             There are no dictionaries. Let's create a new one :)
           </Typography>
@@ -107,9 +111,12 @@ const DictionaryList = () => {
                 <StyledTableCell align="right">Action</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {dictionaries.map(({ id, name, language, ...rest }) => (
-                <TableRow key={id}>
+            <TableBody data-testid="dictionary-table-body">
+              {dictionaries.map(({ id, name, language, ...rest }, index) => (
+                <TableRow
+                  key={id}
+                  data-testid={`dictionary-table-row-${index}`}
+                >
                   <StyledTableCell scope="row">
                     <Link to={`/dictionary/${name}`}>
                       <Typography>{name}</Typography>
@@ -152,7 +159,7 @@ const DictionaryList = () => {
           submitCallback={() => setIsDictionaryFormModalOpen(false)}
         />
       </Modal>
-    </>
+    </Grid>
   );
 };
 
