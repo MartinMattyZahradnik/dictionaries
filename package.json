@@ -22,7 +22,7 @@
     "@types/styled-components": "5.0.1",
     "@types/uuid": "7.0.1",
     "@types/yup": "0.26.33",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "formik": "2.1.4",
     "ramda": "0.27.0",
     "react": "16.13.0",
